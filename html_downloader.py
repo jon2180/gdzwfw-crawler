@@ -55,7 +55,7 @@ def try_catch(cb):
 
 
 @try_catch
-def fetch_html(url, timeout: 'float' = 60):
+def fetch_html(url, timeout: float = 60):
     req = request.Request(url)
     req.add_header("User-Agent", user_agent)
     res = request.urlopen(req, timeout=timeout)
@@ -71,7 +71,7 @@ def build_post_body(query) -> bytes:
 
 
 @try_catch
-def fetch_json(url: 'str', post_body: 'bytes', refer: 'str', content_type: 'str'):
+def fetch_json(url: str, post_body: bytes, refer: str, content_type: str):
     req = request.Request(url, post_body)
     req.add_header("User-Agent", ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)"
                                   " Chrome/87.0.4280.88 Safari/537.36"))

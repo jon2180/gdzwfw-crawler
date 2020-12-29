@@ -2,7 +2,7 @@
 政务公开 权责清单/
 """
 from bs4 import BeautifulSoup
-from html_parser import parse_json, parse_html
+from html_parser import parse_json, parse_html, parse_html_by_etree
 from html_downloader import fetch_json, build_post_body, fetch_html
 
 
@@ -25,8 +25,8 @@ def res_html(fetch_func):
 
         if json_str is None:
             raise ValueError()
-        bs = parse_html(json_str)
-        assert isinstance(bs, BeautifulSoup)
+        bs = parse_html_by_etree(json_str)
+        # assert isinstance(bs, BeautifulSoup)
         return bs
 
     return wrapped_fetch_func
@@ -200,9 +200,10 @@ def fetch_common_audit_item_(
 
 
 @res_html
-def fetch_par_guide_(guid: 'str' = '11440000MB2D0164XH2440289876000') -> BeautifulSoup:
+def fetch_par_guide_(guid: 'str' = '11440000MB2D0164XH2440289876000'):
     """
     GET
     :return: html
     """
     return fetch_html(f'https://www.gdzwfw.gov.cn/portal/guide/{guid}')
+
