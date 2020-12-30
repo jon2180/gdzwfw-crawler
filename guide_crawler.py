@@ -1,9 +1,10 @@
 import requests
 import json
-import time
-from lxml import etree
-# from package import tool
-# import re
+# import time
+# from lxml import etree
+# # from package import tool
+# # import re
+from model import PowerAndResponsibility
 
 headers = {
     # "Accept": "application/json, text/javascript, */*; q=0.01",
@@ -29,9 +30,9 @@ headers = {
 # belongDomainList = "外交|国防|发展和改革|教育|科学技术|工业和信息化|民族事务|公安|国家安全|民政|司法|财政|人力资源和社会保障|自然资源|生态环境|住房和城乡建设|交通运输|水利|农业农村|商务|文化和旅游|卫生健康|退役军人事务|应急管理|人民银行|审计|国有资产监督管理|海关|税务|市场监督管理|广播电视|体育|统计|国际发展合作|医疗保障|参事|国家机关事务管理|港澳事务|研究|新华通讯|科学|社会科学|工程|发展研究|广播电视|气象|银行保险监督管理|证券监督管理|信访|粮食和物资储备|能源|国防科技工业|烟草专卖|移民|林业和草原|铁路|民用航空|邮政|文物|中医药管理|煤矿安全监察|外汇管理|药品监督管理|知识产权"
 
 
-def GetWeb(url, params):
-    page = requests.get(url=url, params=params, headers=headers)
-    return page
+# def GetWeb(url, params):
+#     page = requests.get(url=url, params=params, headers=headers)
+#     return page
 
 
 # 11.主题分类
@@ -186,7 +187,7 @@ def getflyjInfo(dom):
     return info
 
 
-def parse_guide_detail(dom, ):
+def parse_guide_detail(dom, par_model: PowerAndResponsibility):
     # ALlinfo = dict()
     div_list = dom.xpath('//div[@class="matters-content-part"]')
     # 行政许可基本信息
