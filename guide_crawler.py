@@ -198,47 +198,66 @@ def parse_guide_detail(dom, par_model: PowerAndResponsibility):
     basic_tr_list = admin_basic_info.xpath('./table/tbody/tr')
     table_list = admin_basic_info.xpath('./div/table')
     table_name = admin_basic_info.xpath('./div/h3/text()')
-    print(table_list)
+    # print(table_list)
     # 基本信息
-    basicInfo = getDictInfo(basic_tr_list, admin_basic_info.xpath('./h2/text()')[0])
-    print("基本信息：", basicInfo)
+    basicInfo = getDictInfo(basic_tr_list, admin_basic_info.xpath('./h2/text()')[0])['基本信息']
+    # print("基本信息：", basicInfo)
+
+    par_model.title = basicInfo['事项名称']
+    par_model.publisher = basicInfo['实施主体']
+    par_model.pk_mplementer_kind = basicInfo['实施主体性质']
+    par_model.pk_field = basicInfo['事项类型']
+    par_model.pk_commitment_time = basicInfo['承诺办结时限']
+    par_model.pk_declare_type = basicInfo['办件类型']
+    par_model.pk_legal_time = basicInfo['法定办结时限']
+    par_model.pk_item_type = basicInfo['事项类型']
+    par_model.pk_process_form = basicInfo['办理形式']
+    par_model.pk_presence_num = basicInfo['到办事现场次数']
+    par_model.pk_presence_reason = basicInfo['必须现场办理原因']
+    par_model.pk_is_charge = basicInfo['是否收费']
+    par_model.pk_online_processing = basicInfo['是否网办']
+    par_model.pk_online_processing_depth = basicInfo['网上办理深度']
+    par_model.pk_online_payment = basicInfo['是否支持网上支付']
+    par_model.pk_appointment = basicInfo['是否支持预约办理']
+    par_model.pk_logistics_express = basicInfo['是否支持物流快递']
+
     # 跨域通办
-    kytbInfo = getTrAsNameInfo(table_list[0], table_name[0])
-    print("跨域通办：", kytbInfo)
+    # kytbInfo = getTrAsNameInfo(table_list[0], table_name[0])['跨域通办']
+    # print("跨域通办：", kytbInfo)
     # 审批信息
     spxxInfo = getDictInfo(table_list[1].xpath('./tbody/tr'), table_name[1])
     print("审批信息：", spxxInfo)
     # 审批结果
     spjgInfo = getTheadAsNameInfo(table_list[2], table_name[2])
-    print("审批结果：", spjgInfo)
+    # print("审批结果：", spjgInfo)
     # 编码代码
     bmdmInfo = getDictInfo(table_list[3].xpath('./tbody/tr'), table_name[3])
-    print("编码代码：", bmdmInfo)
+    # print("编码代码：", bmdmInfo)
     # 特别程序
     tbcxInfo = getTrAsNameInfo(table_list[4], table_name[4])
-    print("特别程序：", tbcxInfo)
+    # print("特别程序：", tbcxInfo)
     # 中介服务
     zjfwInfo = getTrAsNameInfo(table_list[5], table_name[5])
-    print("中介服务：", zjfwInfo)
+    # print("中介服务：", zjfwInfo)
     # 其他信息
     qtxxInfo = getDictInfo(table_list[6].xpath('./tbody/tr'), table_name[6])
-    print("其他信息：", qtxxInfo)
+    # print("其他信息：", qtxxInfo)
 
     # 受理标准
     slbz_info = div_list[1]
     # print(*slbz_info)
     # 受理范围
     slfwInfo = getDictInfo(slbz_info.xpath('./table/tbody/tr'), slbz_info.xpath('./h3/text()')[0])
-    print("受理范围：", slfwInfo)
+    # print("受理范围：", slfwInfo)
     # 受理条件
     sltjInfo = getSLTJinfo(slbz_info, slbz_info.xpath('./h3/text()')[1])
-    print("受理条件：", sltjInfo)
+    # print("受理条件：", sltjInfo)
 
     # 办理流程
     bllc_info = div_list[2]
     # print(*bllc_info)
     bllcInfo = getBLLCinfo(bllc_info)
-    print("办理流程：", bllcInfo)
+    # print("办理流程：", bllcInfo)
 
     # 申请材料
     sqcl_info = div_list[3]
@@ -246,29 +265,30 @@ def parse_guide_detail(dom, par_model: PowerAndResponsibility):
     table = sqcl_info.xpath('./div/div/div/table')[0]
     # print(type(table))
     sqclInfo = getTheadAsNameInfo(table, sqcl_info.xpath('./h2/text()'))
-    print("申请材料：", sqclInfo)
+    # print("申请材料：", sqclInfo)
     # 中介服务
     table = sqcl_info.xpath('./table')[0]
     name = sqcl_info.xpath('./h3/text()')[0]
     zjfwInfo = getTrAsNameInfo(table, name)
-    print("中介服务：", zjfwInfo)
+    # print("中介服务：", zjfwInfo)
 
     # 咨询监督
     zxjd_info = div_list[4]
     name_list = zxjd_info.xpath('./div/div/h3/text()')
     # 咨询方式和监督投诉方式
     zxfsInfo = getZXJDinfo(zxjd_info, name_list)
-    print("咨询方式和监督投诉方式：", zxfsInfo)
+    # print("咨询方式和监督投诉方式：", zxfsInfo)
 
     # 窗口办理
     ckbl_info = div_list[5]
     ckblInfo = getPAsInfo(ckbl_info)
     print("窗口办理：", ckblInfo)
+    # par_model.pk_process_place = ckblInfo['办理地点']
 
     # 收费项目信息
     sfxmxx_info = div_list[6]
     sfxmxxInfo = getPAsInfo(sfxmxx_info)
-    print("收费项目信息：", sfxmxxInfo)
+    # print("收费项目信息：", sfxmxxInfo)
 
     # 法律依据
     flyj_info = div_list[7]
@@ -276,6 +296,6 @@ def parse_guide_detail(dom, par_model: PowerAndResponsibility):
     # print(tree.xpath('//*[@id="li_tab3"]/a/text()'))
     # print(tree.xpath('//*[@id="tab3"]/div/table/tr/th/text()'))
     flyjInfo = getflyjInfo(dom)
-    print("法律依据：", flyjInfo)
+    # print("法律依据：", flyjInfo)
 
     # 权力与义务

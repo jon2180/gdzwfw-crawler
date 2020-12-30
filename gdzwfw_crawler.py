@@ -8,7 +8,7 @@ from excel_writer import PARExcelWriter
 from model import PowerAndResponsibility
 from threading import Thread
 from guide_crawler import parse_guide_detail
-
+from traceback import print_exc
 # pool = ThreadPoolExecutor(max_workers=4)
 
 
@@ -19,10 +19,14 @@ def start_portal_guide(
 ):
     # TODO 在这里获取核心数据
     guide_dom = api.fetch_par_guide_(guid=guid)
-    parse_guide_detail(guide_dom, par_model)
+    try:
+        parse_guide_detail(guide_dom, par_model)
+    except Exception:
+        print_exc()
     #
     for key, val in par_model.__dict__.items():
-        print(f'{key}:\t{val}')
+        if val is not None:
+            print(f'{key}:\t{val}')
 
     par_excel_writer.write_row(par_model)
 
