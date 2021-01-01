@@ -361,6 +361,11 @@ class PowerAndResponsibility:
     投诉电话;投诉监督电话;监督电话;监督和投诉电话;监督投诉方式;监督投诉渠道
     """
 
+    pk_version: str = None
+    """
+    事项版本
+    """
+
 
 """
 人民政府

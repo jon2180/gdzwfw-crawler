@@ -28,7 +28,8 @@ def start_portal_guide(
         if val is not None:
             print(f'{key}:\t{val}')
 
-    par_excel_writer.write_row(par_model)
+    if par_excel_writer is not None:
+        par_excel_writer.write_row(par_model)
 
 
 def start_affairs_public_detail(
@@ -79,7 +80,7 @@ def start_affairs_public_detail(
                 page_num=page_index
             )
         for item in dic_audit_item['data']['CUSTOM']['AUDIT_ITEMLIST']:
-            print(f'{prefix} - 实施清单#{idx}')
+            print(f'\n{prefix} - 实施清单#{idx}')
 
             # print('guid:         ', item['ITEMGUID'])
             # print('catalog_name: ', item['parentCatalogName'])
@@ -104,6 +105,8 @@ def crawl_per_county(
 ):
     """
     爬取单个区县
+
+
     """
 
     # TODO 按区写入 excel
