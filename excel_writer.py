@@ -72,7 +72,7 @@ class PARExcelWriter:
         work_sheet[f'L{self.current_row_index}'] = data.originalAddress or ''
         work_sheet[f'M{self.current_row_index}'] = data.htmlContent or ''
         work_sheet[f'N{self.current_row_index}'] = data.creatorName or ''
-        work_sheet[f'O{self.current_row_index}'] = data.creatorName or ''
+        # work_sheet[f'O{self.current_row_index}'] = data. or ''
 
         if data.pk_field is not None:
             work_sheet[f'P{self.current_row_index}'] = data.pk_field

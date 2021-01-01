@@ -10,7 +10,7 @@ from threading import Thread
 from guide_crawler import parse_guide_detail
 from traceback import print_exc
 # pool = ThreadPoolExecutor(max_workers=4)
-
+from tool import getbelongDomain
 
 def start_portal_guide(
         par_excel_writer: PARExcelWriter,
@@ -53,7 +53,7 @@ def start_affairs_public_detail(
     dic_useful = main_detail['data']['custom']['POWERANDRESPONSIBILITYLIST']
     par_model.publisher = dic_useful['DEPT_NAME']
     par_model.classify = dic_useful['TASK_TYPE']
-    par_model.belongDomain = '政府-xxx'
+    par_model.belongDomain = getbelongDomain(dic_useful.get('DEPT_NAME', ''))
     base_code = dic_useful['XKSXBM']
 
     dic_audit_item = api.fetch_common_audit_item_(
@@ -153,16 +153,25 @@ def crawl_per_county(
         for item in dic_par['data']['custom']['PowerandresponsibilityList']:
             par_model = PowerAndResponsibility()
             par_model.libNum = 'qzqdk'
+            par_model.title = item.get('TASK_NAME', '')
             par_model.source = '广东政务服务网'
             par_model.genre = '清单'
-            # TODO
+            par_model.catalogId = item.get('CATALOG_ID', '')
             par_model.creatorName = 'ZhangJun, HuXing'
-            par_model.catalogId = item['CATALOG_ID']
 
             # 主要是用于做 referer 的值
             qzqd_code = item['ROWGUID']  # B09EA62464F2128AE0530A3D10ACF619
             dept_code = item['DEPT_CODE']  # MB2D0164X
-            catelog_id = item['CATALOG_ID']
+
+            # print(qzqd_code)
+            # print(dept_code)
+            # print(catelog_id)
+            # print('dept_code: ', item['DEPT_CODE'])
+            # print('row_guid : ', item['ROWGUID'])  # 关键值，url 拼接可用
+            # print('dept_name: ', item['DEPT_NAME'])
+            # print('laws     : ', item['LAWS'])
+            # print('responsibility: ', item['RESPONSIBILITY'])
+            # print()
 
             prefix = f'权责清单#{idx}'
             # print(prefix)

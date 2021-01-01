@@ -262,7 +262,7 @@ def getInfo(dom, s, div, par_model):
             par_model.pk_item_source = spxxInfo.get('权力来源', '无')
             par_model.pk_approval_mode = spxxInfo.get('审批服务形式', '') + spxxInfo.get('审批模式', '')
             # par_model对象里差事项版本号
-            # par_model.pk_事项版本号 = spxxInfo.get('事项版本号','')
+            par_model.pk_version = spxxInfo.get('事项版本号', '')
         kytbInfo = kytbInfo.get('跨域通办', '无跨域通办')
         if kytbInfo != '无跨域通办':
             for i in kytbInfo:
@@ -288,10 +288,6 @@ def getInfo(dom, s, div, par_model):
             par_model.pk_special_procedure = str(tbcxInfo)
         else:
             par_model.pk_special_procedure = ''
-
-
-
-
     elif s == "受理标准":
         # 受理标准
         slbz_info = div
@@ -328,17 +324,20 @@ def getInfo(dom, s, div, par_model):
         # 申请材料
         sqcl_info = div
         # print(*sqcl_info)
-        table = sqcl_info.xpath('./div/div/div/table')[0]
+        table = sqcl_info.xpath('./div/div/div/table')
         # print(type(table))
-        sqclInfo = getTheadAsNameInfo(table, sqcl_info.xpath('./h2/text()'))
+        if len(table) > 0:
+            sqclInfo = getTheadAsNameInfo(table[0], sqcl_info.xpath('./h2/text()'))
+            par_model.pk_materials = str(sqclInfo)
         # print("申请材料：", sqclInfo)
+        else:
+            par_model.pk_materials = ''
+
         # 中介服务
         table = sqcl_info.xpath('./table')[0]
         name = sqcl_info.xpath('./h3/text()')[0]
         zjfwInfo = getTrAsNameInfo(table, name)
         # print("中介服务：", zjfwInfo)
-
-        par_model.pk_materials = str(sqclInfo)
     elif s == "咨询监督":
         # 咨询监督
         zxjd_info = div
