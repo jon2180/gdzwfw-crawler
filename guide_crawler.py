@@ -23,25 +23,6 @@ def getDictInfo(tr_list, name):
                     content_info.append('')
             else:
                 content_info.append('')
-            # p_info = p.xpath(" ./p/a/text() | ./p/text() | ./a/text() | ./text()")
-            # if len(p_info) > 0:
-            #     for i in range(len(p_info)):
-            #         p_info[i] = p_info[i].replace('\r', '').replace('\t', '').replace('\n', '').replace('\xa0', '')
-            #     deleteNullInList(p_info)
-            #     content_info.append(p_info[0])
-            # else:
-            #     content_info.append('')
-            # p_info = p.xpath(" ./p/a/text() | ./p/text() | ./a/text() | ./text()")
-            # # print(p_info)
-            # # p_info[0] = p_info[0].replace('\r','').replace('\t','').replace('\n','').replace('\xa0','')
-            # # print(p_info[0])
-            # if len(p_info) > 1:
-            #     p_info = p_info[1:2]
-            #     # print(p_info)
-            # p_info[0] = p_info[0].replace('\r', '').replace('\t', '').replace('\n', '').replace('\xa0', '')
-            # content_info.append(p_info[0])
-        # print(th_info)
-        # print(content_info)
         for i in range(len(th_info)):
             # ALlinfo[th_info[i]] = content_info[i]
             info_list[th_info[i]] = content_info[i]
@@ -70,9 +51,6 @@ def getTrAsNameInfo(table, name):
             kytb_list[name_list[i]] = td
             i += 1
         all_kytb_list[num] = kytb_list
-        # print(all_kytb_list)
-    # print(all_kytb_list)
-    # ALlinfo["跨域通办"] = all_kytb_list
     Info[name] = all_kytb_list
     return Info
 

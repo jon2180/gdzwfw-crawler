@@ -1,9 +1,22 @@
 """
+网页解析器
+
+: 先解析 Html
+: 获取其中的有效链接，存入 Url_manager
+: 解析有效数据，并把数据存入 excel
+
 政务公开 权责清单/
 """
 from bs4 import BeautifulSoup
-from html_parser import parse_json, parse_html, parse_html_by_etree
-from html_downloader import fetch_json, build_post_body, fetch_html
+from lxml import etree
+from json import loads
+from downloader import fetch_json, build_post_body, fetch_html
+
+# from bs4 import BeautifulSoup
+#
+# def parse_html(html_doc: str) -> BeautifulSoup:
+#     soup = BeautifulSoup(html_doc, 'html.parser')
+#     return soup
 
 
 def res_json(fetch_func):
@@ -12,7 +25,7 @@ def res_json(fetch_func):
 
         if json_str is None:
             raise ValueError()
-        dic = parse_json(json_str)
+        dic = loads(json_str)
         assert isinstance(dic, dict)
         return dic
 
@@ -21,14 +34,10 @@ def res_json(fetch_func):
 
 def res_html(fetch_func):
     def wrapped_fetch_func(*args, **key_word):
-        json_str = fetch_func(*args, **key_word)
-
-        if json_str is None:
+        html_str = fetch_func(*args, **key_word)
+        if html_str is None:
             raise ValueError()
-        bs = parse_html_by_etree(json_str)
-        # assert isinstance(bs, BeautifulSoup)
-        return bs
-
+        return etree.HTML(html_str)
     return wrapped_fetch_func
 
 
@@ -81,10 +90,10 @@ def get_power_and_responsibility(
         page_num: int = 1,
         dept_code: str = '006940386',
         dept_codes: str = ('006939756,006940116,006939801,696453330,725107227,006940140,006940175,006940167,'
-                             '006939991,553612461,MB2D02159,006940060,006939799,006939844,006941135,006939908,'
-                             '096927520,MB2C87614,006940132,MB2D01906,758333079,006940028,MB2D02343,091785615,'
-                             '006940124,00693981X,759214127,006939537,671392287,MB2C86400,671571488,006939916,'
-                             '006940386,MB2D03442,006941127,MB2D0164X,748039589')
+                           '006939991,553612461,MB2D02159,006940060,006939799,006939844,006941135,006939908,'
+                           '096927520,MB2C87614,006940132,MB2D01906,758333079,006940028,MB2D02343,091785615,'
+                           '006940124,00693981X,759214127,006939537,671392287,MB2C86400,671571488,006939916,'
+                           '006940386,MB2D03442,006941127,MB2D0164X,748039589')
 ) -> dict:
     """
     获取权责清单主项
@@ -206,4 +215,3 @@ def fetch_par_guide_(guid: 'str' = '11440000MB2D0164XH2440289876000'):
     :return: html
     """
     return fetch_html(f'https://www.gdzwfw.gov.cn/portal/guide/{guid}')
-

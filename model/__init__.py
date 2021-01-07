@@ -1,1 +1,3 @@
 from model.PowerAndResponsibility import PowerAndResponsibility
+from model.PARExcelWriter import PARExcelWriter
+from model.URLManager import URLManager

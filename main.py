@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from excel_writer import PARExcelWriter
 from gdzwfw_crawler import start_by_city
 
 if __name__ == '__main__':

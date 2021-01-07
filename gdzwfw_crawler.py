@@ -1,16 +1,16 @@
 """
 爬虫主流程，数据获取及数据保存
 """
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import as_completed
 
-import api
-from excel_writer import PARExcelWriter
-from model import PowerAndResponsibility
-from threading import Thread
+import api_parser
+from model import PARExcelWriter, PowerAndResponsibility
 from guide_crawler import parse_guide_detail
 from traceback import print_exc
-# pool = ThreadPoolExecutor(max_workers=4)
 from tool import getbelongDomain
+
+# pool = ThreadPoolExecutor(max_workers=4)
+
 
 def start_portal_guide(
         par_excel_writer: PARExcelWriter,
@@ -18,7 +18,7 @@ def start_portal_guide(
         guid: str
 ):
     # TODO 在这里获取核心数据
-    guide_dom = api.fetch_par_guide_(guid=guid)
+    guide_dom = api_parser.fetch_par_guide_(guid=guid)
     try:
         parse_guide_detail(guide_dom, par_model)
     except Exception:
@@ -41,7 +41,7 @@ def start_affairs_public_detail(
 ):
     # 第一个链接
     # 获取到的是简要信息（没有分页信息）
-    main_detail = api.get_power_and_responsibility_xx(
+    main_detail = api_parser.get_power_and_responsibility_xx(
         qzqd_code=qzqd_code,
         dept_code=dept_code
     )
@@ -56,7 +56,7 @@ def start_affairs_public_detail(
     par_model.belongDomain = getbelongDomain(dic_useful.get('DEPT_NAME', ''))
     base_code = dic_useful['XKSXBM']
 
-    dic_audit_item = api.fetch_common_audit_item_(
+    dic_audit_item = api_parser.fetch_common_audit_item_(
         base_code=base_code,
         task_type=dic_useful['TASK_TYPE'],
         qzqd_code=dept_code,  # TODO
@@ -72,7 +72,7 @@ def start_affairs_public_detail(
             int((int(page_info['TOTALNUM']) - 1) / int(page_info['PAGESIZE'])) + 2):
         # 第二个链接
         if page_index >= 2:
-            dic_audit_item = api.fetch_common_audit_item_(
+            dic_audit_item = api_parser.fetch_common_audit_item_(
                 base_code=base_code,
                 task_type=dic_useful['TASK_TYPE'],
                 qzqd_code=dept_code,  # TODO
@@ -119,7 +119,7 @@ def crawl_per_county(
         # dict_details['data']['data']['department']:
         arr.append(dept['ORGNUMBER'])
 
-    dic_par = api.get_power_and_responsibility(
+    dic_par = api_parser.get_power_and_responsibility(
         dept_code='',
         dept_codes=','.join(arr),
         region=org_area_code,
@@ -142,7 +142,7 @@ def crawl_per_county(
     ):
         # 获取到数据
         if page_index >= 2:
-            dic_par = api.get_power_and_responsibility(
+            dic_par = api_parser.get_power_and_responsibility(
                 dept_code='',
                 dept_codes=','.join(arr),
                 region=org_area_code,
@@ -209,7 +209,7 @@ def start_by_city():
 
     大致逻辑是 先获取到所有市，再获取到各个区，（可以考虑在加个村，目前没做），然后在根据市区为参数开始获取具体的职权列表
     """
-    dict_detail = api.portal_custom_config_get_detail()
+    dict_detail = api_parser.portal_custom_config_get_detail()
     futures = []
     # TODO 遍历市级
     for city in dict_detail['data']['data']['city']:
@@ -220,7 +220,7 @@ def start_by_city():
         print(f'开始爬取 {org_name}')
 
         # TODO 遍历区县级
-        dict_details = api.portal_custom_config_get_detail(region_code=org_area_code)
+        dict_details = api_parser.portal_custom_config_get_detail(region_code=org_area_code)
         for country in dict_details['data']['data']['country']:
             country_org_name = country['ORGNAME']
             country_org_sub_name = country['ORGSNAME']
